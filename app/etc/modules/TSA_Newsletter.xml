@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <TSA_Newsletter>
+            <active>true</active>
+            <codePool>local</codePool>
+        </TSA_Newsletter>
+        <depends>
+            <Mage_Newsletter />
+        </depends>
+    </modules>
+</config>

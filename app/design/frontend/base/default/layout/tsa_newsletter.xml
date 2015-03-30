@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout>
+    <default>
+        <reference name="head">
+            <action method="addItem" ifconfig="tsa_newsletter/settings/enabled">
+                <type>skin_js</type>
+                <name>js/tsa/tsa_newsletter.js</name>
+            </action>
+        </reference>
+        <reference name="footer">
+            <block type="core/template" output="toHtml" before = "-" name="newAjaxMaskBlock" template="tsa/newsletter/mask.phtml" ifconfig="tsa_newsletter/settings/enabled"/>
+        </reference>
+    </default>
+</layout>
