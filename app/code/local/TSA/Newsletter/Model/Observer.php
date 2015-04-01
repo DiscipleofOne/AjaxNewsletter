@@ -38,47 +38,29 @@ class TSA_Newsletter_Model_Observer
         $controller = $observer->getControllerAction();
         if($controller->getRequest()->isAjax()){
             $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
-
-
-            new TSA_Newsletter_Ajax_Handler($controller);
-
-
+            $this->_handleRequest($controller);
         }
-
         return;
-
-
-    }
-}
-
-class TSA_Newsletter_Ajax_Handler
-{
-    private $__response = array();
-    private $__controller;
-
-    public function __construct($obsController)
-    {
-        $this->__controller = $obsController;
-
-        $this->__handleRequest();
-
     }
 
-    private function __handleRequest()
+    protected function _handleRequest($controller)
     {
-        if ($this->__controller->getRequest()->isPost() && $this->__controller->getRequest()->getPost('email')) {
+
+        $response = array();
+
+        if ($controller->getRequest()->isPost() && $controller->getRequest()->getPost('email')) {
             $customerSession = Mage::getSingleton('customer/session');
-            $email = (string)$this->__controller->getRequest()->getPost('email');
+            $email = (string)$controller->getRequest()->getPost('email');
 
             try {
                 if (!Zend_Validate::is($email, 'EmailAddress')) {
-                    Mage::throwException($this->__controller->__('Please enter a valid email address.'));
+                    Mage::throwException($controller->__('Please enter a valid email address.'));
                 }
 
                 if (Mage::getStoreConfig(Mage_Newsletter_Model_Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG) != 1 &&
                     !$customerSession->isLoggedIn()
                 ) {
-                    Mage::throwException($this->__controller->__('Sorry, but administrator denied subscription for guests. Please <a href="%s">register</a>.', Mage::helper('customer')->getRegisterUrl()));
+                    Mage::throwException($controller->__('Sorry, but administrator denied subscription for guests. Please <a href="%s">register</a>.', Mage::helper('customer')->getRegisterUrl()));
                 }
 
                 $ownerId = Mage::getModel('customer/customer')
@@ -86,30 +68,22 @@ class TSA_Newsletter_Ajax_Handler
                     ->loadByEmail($email)
                     ->getId();
                 if ($ownerId !== null && $ownerId != $customerSession->getId()) {
-                    Mage::throwException($this->__controller->__('This email address is already assigned to another user.'));
+                    Mage::throwException($controller->__('This email address is already assigned to another user.'));
                 }
 
                 $status = Mage::getModel('newsletter/subscriber')->subscribe($email);
                 if ($status == Mage_Newsletter_Model_Subscriber::STATUS_NOT_ACTIVE) {
-                    $this->__response['message'] = $this->__controller->__('Confirmation request has been sent.');
+                    $response['message'] = $controller->__('Confirmation request has been sent.');
                 } else {
-                    $this->__response['message'] = $this->__controller->__('Thank you for your subscription.');
+                    $response['message'] = $controller->__('Thank you for your subscription.');
 
                 }
             } catch (Mage_Core_Exception $e) {
-                $this->__response['message'] = $this->__controller->__('There was a problem with the subscription: %s', $e->getMessage());
+                $response['message'] = $controller->__('There was a problem with the subscription: %s', $e->getMessage());
             } catch (Exception $e) {
-                $this->__response['message'] = $this->__controller->__('There was a problem with the subscription.');
+                $response['message'] = $controller->__('There was a problem with the subscription.');
             }
         }
-        $this->__respondRequest();
+        $controller->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
     }
-
-    private function __respondRequest()
-    {
-        $this->__controller->getResponse()->setBody(Mage::helper('core')->jsonEncode($this->__response));
-
-    }
-
-
 }
