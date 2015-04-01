@@ -6,7 +6,7 @@
             <codePool>local</codePool>
         </TSA_Newsletter>
         <depends>
-            <Mage_Newsletter />
+            <Mage_Newsletter/>
         </depends>
     </modules>
 </config>

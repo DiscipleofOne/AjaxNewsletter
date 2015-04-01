@@ -13,14 +13,16 @@
                 </tsa_newsletter>
             </updates>
         </layout>
-        <routers>
-            <newsletter>
-                    <args>
-                        <modules>
-                            <tsa_newsletter before="Mage_Newsletter">TSA_Newsletter</tsa_newsletter>
-                        </modules>
-                    </args>
-            </newsletter>
-        </routers>
+        <events>
+            <controller_action_predispatch_newsletter_subscriber_new>
+                <observers>
+                    <tsa_newsletter_subscribe_observer>
+                        <type>singleton</type>
+                        <class>TSA_Newsletter_Model_Observer</class>
+                        <method>subscribeNewsletterAjax</method>
+                    </tsa_newsletter_subscribe_observer>
+                </observers>
+            </controller_action_predispatch_newsletter_subscriber_new>
+        </events>
     </frontend>
 </config>

@@ -1,0 +1,11 @@
+#ajax-loading-mask {
+    display:inline;
+    position: absolute;
+    background: gray;
+    opacity: .5;
+    color: white;
+    float: right;
+}
+#ajax-loading-mask-loader {
+    padding-left: 127px
+}

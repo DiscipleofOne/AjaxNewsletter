@@ -10,7 +10,7 @@
     <sections>
         <tsa_newsletter translate="label">
             <label>TSA Ajax Newsletter Config</label>
-            <tab>tsa</tab> //match your defined “tab_name”.
+            <tab>tsa</tab>
             <sort_order>100</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>

@@ -6,9 +6,13 @@
                 <type>skin_js</type>
                 <name>js/tsa/tsa_newsletter.js</name>
             </action>
+            <action method="addItem" ifconfig="tsa_newsletter/settings/enabled">
+                <type>skin_css</type>
+                <name>css/tsa/tsa_newsletter.css</name>
+            </action>
         </reference>
         <reference name="footer">
-            <block type="core/template" output="toHtml" before = "-" name="newAjaxMaskBlock" template="tsa/newsletter/mask.phtml" ifconfig="tsa_newsletter/settings/enabled"/>
+            <block type="core/template" before = "-" name="newAjaxMaskBlock" template="tsa/newsletter/mask.phtml" ifconfig="tsa_newsletter/settings/enabled"/>
         </reference>
     </default>
 </layout>
